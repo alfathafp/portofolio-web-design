@@ -1,0 +1,93 @@
+---
+interface Props {
+  text?: string;
+  status?: 'passing' | 'active' | 'warning' | 'info';
+  size?: 'sm' | 'md' | 'lg';
+  pulse?: boolean;
+  href?: string;
+  class?: string;
+}
+
+const {
+  text = 'All Test Suites Passing | Open for SDET Roles',
+  status = 'passing',
+  size = 'md',
+  pulse = true,
+  href,
+  class: className = '',
+} = Astro.props;
+
+const statusStyles = {
+  passing: {
+    bg: 'bg-emerald-950/60 hover:bg-emerald-950/80',
+    border: 'border-emerald-800/50 hover:border-emerald-700/60',
+    text: 'text-emerald-400',
+    dot: 'bg-emerald-400',
+    ping: 'bg-emerald-400',
+  },
+  active: {
+    bg: 'bg-cyan-950/60 hover:bg-cyan-950/80',
+    border: 'border-cyan-800/50 hover:border-cyan-700/60',
+    text: 'text-cyan-400',
+    dot: 'bg-cyan-400',
+    ping: 'bg-cyan-400',
+  },
+  warning: {
+    bg: 'bg-amber-950/60 hover:bg-amber-950/80',
+    border: 'border-amber-800/50 hover:border-amber-700/60',
+    text: 'text-amber-400',
+    dot: 'bg-amber-400',
+    ping: 'bg-amber-400',
+  },
+  info: {
+    bg: 'bg-zinc-900/80 hover:bg-zinc-850',
+    border: 'border-zinc-700/50 hover:border-zinc-600',
+    text: 'text-zinc-300',
+    dot: 'bg-zinc-400',
+    ping: 'bg-zinc-400',
+  },
+};
+
+const currentStyle = statusStyles[status] || statusStyles.passing;
+
+const sizeStyles = {
+  sm: 'px-2.5 py-0.5 text-xs',
+  md: 'px-3.5 py-1 text-xs sm:text-sm',
+  lg: 'px-4 py-1.5 text-sm',
+};
+
+const Tag = href ? 'a' : 'div';
+---
+
+<Tag
+  href={href}
+  class:list={[
+    'inline-flex items-center gap-2.5 rounded-full border font-mono transition-all duration-200 shadow-sm backdrop-blur-md',
+    currentStyle.bg,
+    currentStyle.border,
+    currentStyle.text,
+    sizeStyles[size],
+    href ? 'cursor-pointer hover:shadow-md hover:scale-[1.02]' : 'cursor-default',
+    className,
+  ]}
+>
+  <span class="relative flex h-2 w-2 items-center justify-center flex-shrink-0">
+    {pulse && (
+      <span
+        class:list={[
+          'animate-ping absolute inline-flex h-full w-full rounded-full opacity-75',
+          currentStyle.ping,
+        ]}
+      />
+    )}
+    <span
+      class:list={[
+        'relative inline-flex rounded-full h-2 w-2',
+        currentStyle.dot,
+      ]}
+    />
+  </span>
+  <span class="font-medium tracking-tight whitespace-nowrap">
+    <slot>{text}</slot>
+  </span>
+</Tag>

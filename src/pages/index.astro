@@ -1,0 +1,289 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import StatusBadge from '../components/StatusBadge.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { getCollection } from 'astro:content';
+
+const projects = await getCollection('projects');
+const flagshipProject = projects.find((p) => p.data.featured) || projects[0];
+const toolingProject = projects.find((p) => !p.data.featured) || projects[1];
+
+const valuePillars = [
+  {
+    title: 'Stable & Reliable Test Automation',
+    tag: 'Reliability',
+    description:
+      'Preventing flaky tests in CI/CD by replacing static sleeps with condition-based auto-waiting, creating mock services for unstable third-party APIs, and keeping test data isolated.',
+    icon: `
+      <svg class="w-6 h-6 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+      </svg>
+    `,
+  },
+  {
+    title: 'Internal Developer Tools & Slack Bots',
+    tag: 'Productivity',
+    description:
+      'Building custom Slack automation bots (Socket Mode) and shared Java JAR libraries so developers and QA can trigger targeted regression tests and get real-time test feedback directly in Slack.',
+    icon: `
+      <svg class="w-6 h-6 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+      </svg>
+    `,
+  },
+  {
+    title: 'API & Direct Database Validation',
+    tag: 'Data Integrity',
+    description:
+      'Testing transactional payment and order workflows by validating both HTTP responses and directly checking PostgreSQL database records to ensure data consistency.',
+    icon: `
+      <svg class="w-6 h-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2 1.5 3 3.5 3h9c2 0 3.5-1 3.5-3V7c0-2-1.5-3-3.5-3h-9C5.5 4 4 5 4 7zm0 5h16M9 4v16" />
+      </svg>
+    `,
+  },
+];
+
+const skillsCategories = [
+  {
+    category: 'Languages & Core',
+    skills: ['Java (8 / 17)', 'JavaScript / Node.js', 'SQL (PostgreSQL, MySQL)', 'Bash'],
+  },
+  {
+    category: 'Test Automation',
+    skills: ['Playwright (Java)', 'REST Assured', 'TestNG', 'Appium (Mobile)', 'Selenium WebDriver', 'Cucumber BDD'],
+  },
+  {
+    category: 'Mocking & APIs',
+    skills: ['Express Mock Server', 'WireMock', 'Webhook Simulation', 'Postman'],
+  },
+  {
+    category: 'CI/CD & Observability',
+    skills: ['Jenkins CI', 'Bitbucket Pipelines', 'Allure Report 3', 'Slack Bolt API'],
+  },
+];
+---
+
+<BaseLayout
+  title="Alfath Febriadi Pratama | Software Engineer in Test (SDET)"
+  description="Software Engineer in Test (SDET) with 5+ years of experience in FinTech & Digital Banking (Kredivo, BCA). Building reliable test automation, mock services, and developer tooling."
+>
+  <!-- Hero Section -->
+  <section class="pt-6 pb-16 sm:pt-10 sm:pb-20">
+    <div class="flex flex-col items-start max-w-4xl">
+      <!-- Live Status Badge -->
+      <div class="mb-6">
+        <StatusBadge text="Available for SDET Roles" status="passing" pulse={true} />
+      </div>
+
+      <!-- Headline -->
+      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.15] mb-6 font-sans">
+        Building reliable test automation & <br class="hidden sm:inline" />
+        <span class="text-emerald-400">
+          internal developer tools.
+        </span>
+      </h1>
+
+      <!-- Subheadline -->
+      <p class="text-lg sm:text-xl text-zinc-300 leading-relaxed max-w-3xl mb-10 font-sans">
+        Hi, I'm <strong class="text-white font-semibold">Alfath Febriadi Pratama</strong> — a Software Engineer in Test (<strong class="text-white font-semibold">SEIT / SDET</strong>) with <strong class="text-white font-semibold">5+ years of industry experience</strong> in FinTech and Digital Banking (<span class="text-emerald-400 font-mono font-medium">Kredivo Group</span>, <span class="text-emerald-400 font-mono font-medium">Bank Central Asia</span>). I specialize in stabilizing test pipelines, building mock services for third-party payment APIs, and creating developer tools that streamline test execution.
+      </p>
+
+      <!-- Quick Action CTAs -->
+      <div class="flex flex-wrap items-center gap-4 w-full sm:w-auto">
+        <a
+          href="/projects/fintech-test-ecosystem"
+          class="w-full sm:w-auto px-6 py-3.5 rounded-lg text-sm font-semibold font-mono text-zinc-950 bg-emerald-400 hover:bg-emerald-300 transition-all duration-200 shadow-lg shadow-emerald-950/40 inline-flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98]"
+        >
+          <span>View Flagship Case Study</span>
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+          </svg>
+        </a>
+
+        <a
+          href="/experience"
+          class="w-full sm:w-auto px-6 py-3.5 rounded-lg text-sm font-medium font-mono text-zinc-300 bg-zinc-900/90 hover:bg-zinc-800 hover:text-white border border-zinc-700/80 transition-all inline-flex items-center justify-center gap-2"
+        >
+          <span>View Experience & Skills</span>
+        </a>
+
+        <a
+          href="https://github.com/alfathafp"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="w-full sm:w-auto px-5 py-3.5 rounded-lg text-sm font-medium font-mono text-zinc-400 hover:text-zinc-200 bg-surface/50 hover:bg-surface border border-border transition-colors inline-flex items-center justify-center gap-2"
+        >
+          <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+          </svg>
+          <span>GitHub</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Factual Experience Highlights Bar (Zero Fake Metrics) -->
+  <section class="py-6 border-y border-zinc-800/80 mb-16">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+      <div class="flex flex-col">
+        <span class="text-xs font-mono text-zinc-500 uppercase tracking-wider">Experience</span>
+        <span class="text-2xl font-mono font-bold text-white mt-1">5+ Years</span>
+        <span class="text-xs text-zinc-400 mt-0.5">FinTech & Banking</span>
+      </div>
+      <div class="flex flex-col">
+        <span class="text-xs font-mono text-zinc-500 uppercase tracking-wider">Core Testing Focus</span>
+        <span class="text-xl font-mono font-bold text-emerald-400 mt-1">API & Mobile</span>
+        <span class="text-xs text-zinc-400 mt-0.5">REST Assured, Playwright, Appium</span>
+      </div>
+      <div class="flex flex-col">
+        <span class="text-xs font-mono text-zinc-500 uppercase tracking-wider">Internal Tooling</span>
+        <span class="text-xl font-mono font-bold text-cyan-400 mt-1">Slack & JARs</span>
+        <span class="text-xs text-zinc-400 mt-0.5">Socket Mode automation</span>
+      </div>
+      <div class="flex flex-col">
+        <span class="text-xs font-mono text-zinc-500 uppercase tracking-wider">Companies</span>
+        <span class="text-lg font-mono font-bold text-zinc-200 mt-1">Kredivo & BCA</span>
+        <span class="text-xs text-zinc-400 mt-0.5">High-volume systems</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Core Value Pillars Section -->
+  <section class="mb-20">
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-10">
+      <div>
+        <h2 class="text-xs font-mono font-semibold uppercase tracking-wider text-emerald-400 mb-2">
+          Engineering Approach
+        </h2>
+        <h3 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+          What I Focus on as an SDET
+        </h3>
+      </div>
+      <p class="text-sm text-zinc-400 max-w-md mt-2 md:mt-0 leading-relaxed">
+        Writing automated tests is only half the job. The real value is making test suites stable, maintainable, and easy for any engineer to trigger.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {valuePillars.map((pillar) => (
+        <div class="bg-surface border border-border rounded-xl p-6 hover:border-zinc-700 transition-all duration-200 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <div class="p-2.5 rounded-lg bg-zinc-900/90 border border-zinc-800" set:html={pillar.icon} />
+              <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-zinc-900 text-zinc-400 border border-zinc-800">
+                {pillar.tag}
+              </span>
+            </div>
+            <h4 class="text-lg font-semibold text-zinc-100 mb-2.5">{pillar.title}</h4>
+            <p class="text-sm text-zinc-400 leading-relaxed">{pillar.description}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Featured Case Study Section -->
+  <section class="mb-20">
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <h2 class="text-xs font-mono font-semibold uppercase tracking-wider text-emerald-400 mb-1">
+          Featured Work
+        </h2>
+        <h3 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+          Flagship Case Study
+        </h3>
+      </div>
+      <a
+        href="/projects"
+        class="hidden sm:inline-flex items-center gap-1.5 text-xs font-mono text-zinc-400 hover:text-emerald-400 transition-colors"
+      >
+        <span>View all case studies</span>
+        <span>&rarr;</span>
+      </a>
+    </div>
+
+    {flagshipProject && <ProjectCard project={flagshipProject} />}
+  </section>
+
+  <!-- Internal Tooling Showcase Section -->
+  {toolingProject && (
+    <section class="mb-20">
+      <div class="mb-8">
+        <h2 class="text-xs font-mono font-semibold uppercase tracking-wider text-cyan-400 mb-1">
+          Developer Productivity
+        </h2>
+        <h3 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+          Internal Tooling & Test Infrastructure
+        </h3>
+      </div>
+
+      <ProjectCard project={toolingProject} />
+    </section>
+  )}
+
+  <!-- Tech Stack Categorized Preview -->
+  <section class="mb-20 bg-surface/60 border border-border rounded-2xl p-6 sm:p-8">
+    <div class="max-w-3xl mb-8">
+      <h2 class="text-xs font-mono font-semibold uppercase tracking-wider text-emerald-400 mb-1">
+        Tooling & Technologies
+      </h2>
+      <h3 class="text-2xl font-bold text-white tracking-tight mb-2">
+        Core Technical Stack
+      </h3>
+      <p class="text-sm text-zinc-400 leading-relaxed">
+        Tools and technologies I use to build automation frameworks, mock services, and CI/CD quality gates.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {skillsCategories.map((cat) => (
+        <div class="space-y-3">
+          <h4 class="text-xs font-mono font-semibold text-zinc-300 uppercase tracking-wider pb-1 border-b border-zinc-800">
+            {cat.category}
+          </h4>
+          <ul class="space-y-2">
+            {cat.skills.map((skill) => (
+              <li class="flex items-center gap-2 text-xs font-mono text-zinc-400 hover:text-zinc-200 transition-colors">
+                <span class="h-1.5 w-1.5 rounded-full bg-emerald-500/70"></span>
+                <span>{skill}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Bottom CTA / Contact Card -->
+  <section class="bg-gradient-to-b from-surface to-zinc-950 border border-border rounded-2xl p-8 sm:p-12 text-center">
+    <h3 class="text-2xl sm:text-3xl font-bold text-white tracking-tight mb-3">
+      Let's Connect
+    </h3>
+    <p class="text-sm sm:text-base text-zinc-400 max-w-xl mx-auto leading-relaxed mb-8">
+      Looking for a Software Engineer in Test (SDET) to build test automation frameworks, eliminate flaky tests, or set up CI/CD test gates?
+    </p>
+    <div class="flex flex-wrap items-center justify-center gap-4">
+      <a
+        href="mailto:alfathafp@gmail.com"
+        class="px-6 py-3 rounded-lg text-xs font-mono font-semibold text-zinc-950 bg-emerald-400 hover:bg-emerald-300 transition-all duration-200 shadow-md inline-flex items-center gap-2"
+      >
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+        </svg>
+        <span>Send an Email</span>
+      </a>
+      <a
+        href="https://www.linkedin.com/in/alfathafp/"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="px-6 py-3 rounded-lg text-xs font-mono font-medium text-zinc-200 bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 transition-colors inline-flex items-center gap-2"
+      >
+        <svg class="w-4 h-4 fill-current text-zinc-400" viewBox="0 0 24 24">
+          <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 8.76c-.95 0-1.72-.77-1.72-1.72s.77-1.72 1.72-1.72 1.72.77 1.72 1.72-.77 1.72-1.72 1.72m1.4 9.74v-8.37H5.06v8.37h2.8z"/>
+        </svg>
+        <span>LinkedIn Profile</span>
+      </a>
+    </div>
+  </section>
+</BaseLayout>

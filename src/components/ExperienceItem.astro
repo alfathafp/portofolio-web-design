@@ -1,0 +1,87 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  experience?: CollectionEntry<'experience'>;
+  role?: string;
+  company?: string;
+  period?: string;
+  location?: string;
+  summary?: string;
+  keyAchievements?: string[];
+  techStack?: string[];
+  isCurrent?: boolean;
+}
+
+const { experience, ...directProps } = Astro.props;
+
+const role = experience ? experience.data.role : directProps.role || '';
+const company = experience ? experience.data.company : directProps.company || '';
+const period = experience ? experience.data.period : directProps.period || '';
+const location = experience ? experience.data.location : directProps.location || 'Jakarta, Indonesia';
+const summary = experience ? experience.data.summary : directProps.summary || '';
+const keyAchievements = experience ? experience.data.keyAchievements : directProps.keyAchievements || [];
+const techStack = experience ? experience.data.techStack : directProps.techStack || [];
+const isCurrent = period.toLowerCase().includes('present');
+---
+
+<div class="relative pl-8 sm:pl-10 pb-12 last:pb-2 group">
+  <!-- Timeline vertical line -->
+  <div class="absolute left-3 top-3 bottom-0 w-px bg-zinc-800 group-last:hidden"></div>
+
+  <!-- Timeline Node Dot -->
+  <div
+    class:list={[
+      'absolute left-1.5 top-1.5 h-3.5 w-3.5 rounded-full border-2 transition-all',
+      isCurrent
+        ? 'bg-emerald-500 border-background ring-4 ring-emerald-500/20'
+        : 'bg-zinc-800 border-zinc-600 group-hover:border-emerald-400 group-hover:bg-zinc-700',
+    ]}
+  >
+  </div>
+
+  <div class="bg-surface/70 border border-border hover:border-zinc-700 rounded-xl p-6 sm:p-7 transition-all">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2">
+      <h4 class="text-lg sm:text-xl font-bold text-zinc-100">{role}</h4>
+      <span class="text-xs font-mono font-medium text-emerald-400 bg-emerald-950/40 px-2.5 py-1 rounded border border-emerald-800/40 w-fit">
+        {period}
+      </span>
+    </div>
+
+    <div class="text-sm font-semibold text-zinc-300 font-mono mb-3">
+      {company} &middot; <span class="text-zinc-500 font-normal">{location}</span>
+    </div>
+
+    {summary && <p class="text-sm text-zinc-400 mb-4 leading-relaxed">{summary}</p>}
+
+    <!-- Key achievements list -->
+    {
+      keyAchievements && keyAchievements.length > 0 && (
+        <div class="space-y-2 mb-5">
+          <div class="text-xs font-mono text-zinc-500 uppercase tracking-wider">Key Work & Impact:</div>
+          <ul class="space-y-2">
+            {keyAchievements.map((item) => (
+              <li class="text-xs sm:text-sm text-zinc-300 flex items-start gap-2.5 leading-relaxed">
+                <span class="text-emerald-400 mt-1">&bull;</span>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
+
+    <!-- Technologies used -->
+    {
+      techStack && techStack.length > 0 && (
+        <div class="flex flex-wrap gap-1.5 pt-4 border-t border-zinc-800/60">
+          {techStack.map((tech) => (
+            <span class="px-2.5 py-0.5 text-xs font-mono text-zinc-400 bg-zinc-900 rounded border border-zinc-800">
+              {tech}
+            </span>
+          ))}
+        </div>
+      )
+    }
+  </div>
+</div>

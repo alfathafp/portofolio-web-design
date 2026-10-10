@@ -1,0 +1,202 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import StatusBadge from '../../components/StatusBadge.astro';
+import { getCollection } from 'astro:content';
+
+const projects = await getCollection('projects');
+const sortedProjects = projects.sort((a, b) => (a.data.order || 99) - (b.data.order || 99));
+---
+
+<BaseLayout
+  title="Case Studies & Projects | Alfath Febriadi Pratama"
+  description="Real-world case studies on test automation frameworks, mock services for payment APIs, and internal developer tools."
+>
+  <!-- Page Header -->
+  <section class="py-8 sm:py-12 border-b border-zinc-800/80 mb-12">
+    <div class="max-w-4xl">
+      <div class="flex items-center gap-3 mb-4">
+        <StatusBadge text="Selected Work" status="passing" size="sm" pulse={false} />
+        <span class="text-xs font-mono text-zinc-500 uppercase tracking-widest">Case Studies</span>
+      </div>
+
+      <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-white mb-4">
+        Engineering Case Studies
+      </h1>
+      <p class="text-base sm:text-lg text-zinc-400 leading-relaxed max-w-2xl">
+        Detailed breakdowns of how I build test automation suites, custom mock services, and developer tools to make release cycles faster and more reliable.
+      </p>
+
+      <!-- Category Filter Pills -->
+      <div class="flex flex-wrap gap-2 mt-8" id="filter-container">
+        <button
+          type="button"
+          data-filter="all"
+          class="filter-btn active px-3.5 py-1.5 rounded-lg text-xs font-mono font-medium transition-all bg-emerald-950/70 text-emerald-400 border border-emerald-700/60 shadow-sm"
+        >
+          All Projects ({sortedProjects.length})
+        </button>
+        <button
+          type="button"
+          data-filter="Test Automation"
+          class="filter-btn px-3.5 py-1.5 rounded-lg text-xs font-mono font-medium transition-all bg-surface hover:bg-zinc-800 text-zinc-400 hover:text-zinc-200 border border-border"
+        >
+          Test Automation
+        </button>
+        <button
+          type="button"
+          data-filter="Developer Tools"
+          class="filter-btn px-3.5 py-1.5 rounded-lg text-xs font-mono font-medium transition-all bg-surface hover:bg-zinc-800 text-zinc-400 hover:text-zinc-200 border border-border"
+        >
+          Developer Tools
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects List -->
+  <section class="space-y-8 mb-16">
+    {
+      sortedProjects.map((project) => {
+        const slug = project.id.replace(/\.md$/, '');
+        const isFlagship = project.data.featured;
+        const projectCategory = isFlagship ? 'Test Automation' : 'Developer Tools';
+
+        return (
+          <article
+            data-category={projectCategory}
+            class:list={[
+              'project-card relative rounded-2xl border transition-all duration-300 p-6 sm:p-8 flex flex-col justify-between overflow-hidden',
+              isFlagship
+                ? 'bg-gradient-to-b from-zinc-900/90 to-surface border-emerald-500/40 hover:border-emerald-500/70 shadow-xl'
+                : 'bg-surface/80 border-border hover:border-zinc-700 hover:bg-surface-hover/80',
+            ]}
+          >
+            {isFlagship && (
+              <div class="absolute top-0 right-0">
+                <div class="bg-gradient-to-l from-emerald-500/20 to-transparent text-emerald-400 font-mono text-xs font-semibold tracking-wider px-4 py-1 rounded-bl-xl border-b border-l border-emerald-500/30 uppercase">
+                  ★ Flagship Project
+                </div>
+              </div>
+            )}
+
+            <div>
+              <div class="flex flex-wrap items-center gap-2.5 mb-3">
+                <span class="text-xs font-mono font-medium text-emerald-400 uppercase tracking-wider bg-emerald-950/40 px-2.5 py-0.5 rounded border border-emerald-800/30">
+                  {projectCategory}
+                </span>
+                {project.data.role && (
+                  <span class="text-xs font-mono text-zinc-400 bg-zinc-900 px-2.5 py-0.5 rounded border border-zinc-800">
+                    Role: {project.data.role}
+                  </span>
+                )}
+                {project.data.date && (
+                  <span class="text-xs font-mono text-zinc-500">
+                    {project.data.date}
+                  </span>
+                )}
+              </div>
+
+              <h2 class="text-xl sm:text-2xl font-bold text-zinc-100 hover:text-emerald-300 transition-colors tracking-tight">
+                <a href={`/projects/${slug}`}>
+                  {project.data.title}
+                </a>
+              </h2>
+
+              <p class="mt-3 text-sm sm:text-base text-zinc-400 leading-relaxed max-w-3xl">
+                {project.data.description}
+              </p>
+
+              <!-- Metrics Callout Grid -->
+              {project.data.metrics && project.data.metrics.length > 0 && (
+                <div class="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3 pt-5 border-t border-zinc-800/60">
+                  {project.data.metrics.map((metric) => (
+                    <div class="bg-zinc-900/90 p-3 rounded-xl border border-zinc-800/80">
+                      <div class="text-[11px] font-mono text-zinc-500 uppercase tracking-wider">{metric.label}</div>
+                      <div class="text-base sm:text-lg font-mono font-bold text-emerald-400 mt-0.5">{metric.value}</div>
+                      {metric.detail && (
+                        <div class="text-[11px] text-zinc-400 mt-1 line-clamp-2 leading-snug">{metric.detail}</div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <!-- Tags and CTAs -->
+            <div class="mt-8 pt-5 border-t border-zinc-800/50 flex flex-wrap items-center justify-between gap-4">
+              <div class="flex flex-wrap gap-1.5">
+                {project.data.tags.map((tag) => (
+                  <span class="px-2.5 py-0.5 text-xs font-mono text-zinc-400 bg-zinc-900 rounded border border-zinc-800">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+
+              <div class="flex items-center gap-3">
+                {project.data.githubUrl && (
+                  <a
+                    href={project.data.githubUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="p-2 text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 rounded-lg transition-colors"
+                    title="View Source on GitHub"
+                  >
+                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                      <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+                    </svg>
+                  </a>
+                )}
+
+                <a
+                  href={`/projects/${slug}`}
+                  class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-mono font-semibold bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-400 border border-emerald-500/40 hover:border-emerald-500/70 transition-all"
+                >
+                  <span>Read Full Case Study</span>
+                  <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </article>
+        );
+      })
+    }
+  </section>
+
+  <!-- Client-side filter script -->
+  <script>
+    function setupFilters() {
+      const filterBtns = document.querySelectorAll('.filter-btn');
+      const cards = document.querySelectorAll('.project-card');
+
+      filterBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const filter = btn.getAttribute('data-filter');
+
+          // Update active button state
+          filterBtns.forEach((b) => {
+            b.classList.remove('bg-emerald-950/70', 'text-emerald-400', 'border-emerald-700/60', 'shadow-sm', 'active');
+            b.classList.add('bg-surface', 'text-zinc-400', 'border-border');
+          });
+
+          btn.classList.add('bg-emerald-950/70', 'text-emerald-400', 'border-emerald-700/60', 'shadow-sm', 'active');
+          btn.classList.remove('bg-surface', 'text-zinc-400', 'border-border');
+
+          // Filter cards
+          cards.forEach((card) => {
+            const category = card.getAttribute('data-category');
+            if (filter === 'all' || category === filter) {
+              (card as HTMLElement).style.display = 'flex';
+            } else {
+              (card as HTMLElement).style.display = 'none';
+            }
+          });
+        });
+      });
+    }
+
+    setupFilters();
+    document.addEventListener('astro:page-load', setupFilters);
+  </script>
+</BaseLayout>

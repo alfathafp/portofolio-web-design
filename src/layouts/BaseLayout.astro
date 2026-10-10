@@ -1,0 +1,133 @@
+---
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import CodeCopy from '../components/CodeCopy.astro';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  article?: boolean;
+}
+
+const {
+  title = 'Alfath Febriadi Pratama | Software Engineer in Test (SDET)',
+  description = 'Software Engineer in Test (SEIT / SDET) with 5+ years building deterministic test automation, programmable mock ecosystems, and CI/CD developer tooling across FinTech & Banking.',
+  image = '/og-image.png',
+  article = false,
+} = Astro.props;
+
+const siteUrl = Astro.site ? Astro.site.toString().replace(/\/$/, '') : 'https://alfath.dev';
+const canonicalURL = new URL(Astro.url.pathname, siteUrl);
+const socialImageURL = new URL(image, siteUrl);
+
+// Structured Schema.org JSON-LD definition
+const jsonLd = article
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'TechArticle',
+      headline: title,
+      description: description,
+      image: socialImageURL.toString(),
+      url: canonicalURL.toString(),
+      author: {
+        '@type': 'Person',
+        name: 'Alfath Febriadi Pratama',
+        jobTitle: 'Software Development Engineer in Test',
+        sameAs: [
+          'https://github.com/alfathafp',
+          'https://www.linkedin.com/in/alfathafp/'
+        ]
+      }
+    }
+  : {
+      '@context': 'https://schema.org',
+      '@type': 'ProfilePage',
+      mainEntity: {
+        '@type': 'Person',
+        name: 'Alfath Febriadi Pratama',
+        alternateName: 'Alfath',
+        jobTitle: 'Software Development Engineer in Test (SDET)',
+        description: description,
+        url: siteUrl,
+        image: socialImageURL.toString(),
+        worksFor: {
+          '@type': 'Organization',
+          name: 'Kredivo Group (PT FinAccel Teknologi Indonesia)'
+        },
+        alumniOf: {
+          '@type': 'CollegeOrUniversity',
+          name: 'Politeknik STMI Jakarta'
+        },
+        knowsAbout: [
+          'Software Development Engineer in Test',
+          'Playwright Automation',
+          'Java 17',
+          'TestNG',
+          'REST Assured',
+          'Programmable Mocking',
+          'Allure Report',
+          'FinTech Test Architectures',
+          'CI/CD Test Gates'
+        ],
+        sameAs: [
+          'https://github.com/alfathafp',
+          'https://www.linkedin.com/in/alfathafp  /'
+        ]
+      }
+    };
+---
+
+<!doctype html>
+<html lang="en" class="dark scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonicalURL} />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Primary Meta Tags -->
+    <title>{title}</title>
+    <meta name="title" content={title} />
+    <meta name="description" content={description} />
+    <meta name="author" content="Alfath Febriadi Pratama" />
+    <meta name="keywords" content="SDET, Software Engineer in Test, QA Automation, Java, Playwright, REST Assured, TestNG, Appium, FinTech, Mock Services, Allure Report, CI/CD" />
+
+    <!-- Open Graph / Facebook / LinkedIn -->
+    <meta property="og:type" content={article ? 'article' : 'website'} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={socialImageURL} />
+    <meta property="og:site_name" content="Alfath SDET Portfolio" />
+
+    <!-- Twitter / X -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={canonicalURL} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={socialImageURL} />
+
+    <!-- Favicon SVG fallback -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🟢</text></svg>" />
+
+    <!-- Schema.org JSON-LD Structured Data -->
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+  <body class="bg-background text-zinc-100 min-h-screen flex flex-col font-sans antialiased selection:bg-emerald-950 selection:text-emerald-400 overflow-x-hidden">
+    <!-- Ambient subtle background grid and glow -->
+    <div class="fixed inset-0 pointer-events-none -z-10 grid-pattern opacity-20"></div>
+    <div class="fixed top-0 left-1/2 -translate-x-1/2 w-[800px] h-[350px] bg-emerald-500/5 blur-[120px] pointer-events-none -z-10 rounded-full"></div>
+
+    <Navbar />
+
+    <main class="flex-1 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+      <slot />
+    </main>
+
+    <Footer />
+    <CodeCopy />
+  </body>
+</html>

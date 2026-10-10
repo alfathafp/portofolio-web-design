@@ -1,0 +1,225 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import StatusBadge from '../../components/StatusBadge.astro';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((project) => ({
+    params: { slug: project.id.replace(/\.md$/, '') },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { Content, headings } = await render(project);
+
+const allProjects = await getCollection('projects');
+const sortedProjects = allProjects.sort((a, b) => (a.data.order || 99) - (b.data.order || 99));
+const currentIndex = sortedProjects.findIndex((p) => p.id === project.id);
+const prevProject = currentIndex > 0 ? sortedProjects[currentIndex - 1] : null;
+const nextProject = currentIndex < sortedProjects.length - 1 ? sortedProjects[currentIndex + 1] : null;
+
+const isFlagship = project.data.featured;
+---
+
+<BaseLayout
+  title={`${project.data.title} | Case Study`}
+  description={project.data.description}
+  article={true}
+>
+  <!-- Back Link & Breadcrumbs -->
+  <div class="mb-8 pt-2">
+    <a
+      href="/projects"
+      class="inline-flex items-center gap-2 text-xs font-mono text-zinc-400 hover:text-emerald-400 transition-colors"
+    >
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+      </svg>
+      <span>Back to All Case Studies</span>
+    </a>
+  </div>
+
+  <!-- Case Study Header -->
+  <header class="pb-10 border-b border-zinc-800 mb-10">
+    <div class="flex flex-wrap items-center gap-3 mb-4">
+      <StatusBadge
+        text={isFlagship ? '★ Flagship Architecture' : 'Internal Platform'}
+        status={isFlagship ? 'passing' : 'active'}
+        size="sm"
+        pulse={isFlagship}
+      />
+      {project.data.role && (
+        <span class="text-xs font-mono text-zinc-400 bg-zinc-900 px-2.5 py-1 rounded border border-zinc-800">
+          Role: {project.data.role}
+        </span>
+      )}
+      {project.data.date && (
+        <span class="text-xs font-mono text-zinc-500 bg-zinc-900/60 px-2.5 py-1 rounded border border-zinc-800/60">
+          {project.data.date}
+        </span>
+      )}
+    </div>
+
+    <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-[1.15] mb-6">
+      {project.data.title}
+    </h1>
+
+    <p class="text-lg sm:text-xl text-zinc-300 leading-relaxed max-w-3xl mb-8">
+      {project.data.description}
+    </p>
+
+    <!-- Metrics Callout Header Grid -->
+    {project.data.metrics && project.data.metrics.length > 0 && (
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3.5 mb-8">
+        {project.data.metrics.map((metric) => (
+          <div class="bg-surface border border-border p-4 rounded-xl">
+            <div class="text-xs font-mono text-zinc-500 uppercase tracking-wider">{metric.label}</div>
+            <div class="text-xl sm:text-2xl font-mono font-bold text-emerald-400 mt-1">{metric.value}</div>
+            {metric.detail && (
+              <div class="text-xs text-zinc-400 mt-1 leading-snug">{metric.detail}</div>
+            )}
+          </div>
+        ))}
+      </div>
+    )}
+
+    <!-- Architecture Specification Card -->
+    {project.data.architecture && (
+      <div class="bg-zinc-900/80 border border-zinc-800 rounded-xl p-5 sm:p-6 mb-8">
+        <h3 class="text-xs font-mono font-semibold text-emerald-400 uppercase tracking-wider mb-4 flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+          </svg>
+          <span>Architecture Specifications</span>
+        </h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+          {Object.entries(project.data.architecture).map(([key, val]) => (
+            <div class="bg-surface/90 border border-zinc-800/80 p-3 rounded-lg flex flex-col justify-between">
+              <span class="text-[11px] font-mono text-zinc-500 uppercase tracking-wider">{key}</span>
+              <span class="text-xs font-mono text-zinc-200 mt-1 font-medium">{val}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+
+    <!-- Tags and Action Bar -->
+    <div class="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-zinc-800/60">
+      <div class="flex flex-wrap gap-1.5">
+        {project.data.tags.map((tag) => (
+          <span class="px-2.5 py-0.5 text-xs font-mono text-zinc-400 bg-zinc-900 rounded border border-zinc-800">
+            {tag}
+          </span>
+        ))}
+      </div>
+
+      <div class="flex items-center gap-3">
+        {project.data.githubUrl && (
+          <a
+            href={project.data.githubUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-mono text-zinc-300 bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 transition-colors"
+          >
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+            </svg>
+            <span>GitHub Repository</span>
+          </a>
+        )}
+      </div>
+    </div>
+  </header>
+
+  <!-- Content Layout with Sticky Table of Contents -->
+  <div class="grid grid-cols-1 lg:grid-cols-4 gap-12">
+    <!-- Main Markdown Body -->
+    <div class="lg:col-span-3">
+      <article class="prose prose-invert prose-emerald max-w-none prose-headings:scroll-mt-24 prose-pre:border prose-pre:border-zinc-800 prose-pre:bg-surface prose-code:font-mono prose-table:border-collapse prose-th:border prose-th:border-zinc-800 prose-td:border prose-td:border-zinc-800/80">
+        <Content />
+      </article>
+    </div>
+
+    <!-- Table of Contents Sidebar -->
+    <aside class="hidden lg:block lg:col-span-1">
+      <div class="sticky top-24 space-y-6">
+        {headings && headings.length > 0 && (
+          <div class="bg-surface/70 border border-border rounded-xl p-5">
+            <h4 class="text-xs font-mono font-semibold text-emerald-400 uppercase tracking-wider mb-4">
+              On This Page
+            </h4>
+            <nav class="space-y-2 text-xs">
+              {headings
+                .filter((h) => h.depth <= 3)
+                .map((heading) => (
+                  <a
+                    href={`#${heading.slug}`}
+                    class:list={[
+                      'block text-zinc-400 hover:text-emerald-400 transition-colors leading-snug',
+                      heading.depth === 3 ? 'pl-3 text-zinc-500' : 'font-medium',
+                    ]}
+                  >
+                    {heading.text}
+                  </a>
+                ))}
+            </nav>
+          </div>
+        )}
+
+        <div class="bg-zinc-900/60 border border-zinc-800/80 rounded-xl p-4 text-xs text-zinc-400">
+          <div class="font-mono text-zinc-300 font-semibold mb-1">Architecture Inquiries?</div>
+          <p class="leading-relaxed mb-3">
+            Interested in implementing this test architecture in your engineering org?
+          </p>
+          <a
+            href="https://www.linkedin.com/in/alfathafp/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-emerald-400 hover:underline font-mono inline-flex items-center gap-1"
+          >
+            Get in touch &rarr;
+          </a>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Bottom Next / Previous Case Study Navigation -->
+  <nav class="mt-16 pt-8 border-t border-zinc-800 grid grid-cols-1 sm:grid-cols-2 gap-4">
+    {
+      prevProject ? (
+        <a
+          href={`/projects/${prevProject.id.replace(/\.md$/, '')}`}
+          class="group p-5 rounded-xl bg-surface/70 border border-border hover:border-zinc-700 transition-all flex flex-col justify-between"
+        >
+          <span class="text-xs font-mono text-zinc-500 flex items-center gap-1 mb-2">
+            &larr; Previous Case Study
+          </span>
+          <span class="text-sm font-semibold text-zinc-200 group-hover:text-emerald-400 transition-colors line-clamp-1">
+            {prevProject.data.title}
+          </span>
+        </a>
+      ) : (
+        <div></div>
+      )
+    }
+
+    {
+      nextProject && (
+        <a
+          href={`/projects/${nextProject.id.replace(/\.md$/, '')}`}
+          class="group p-5 rounded-xl bg-surface/70 border border-border hover:border-zinc-700 transition-all flex flex-col justify-between sm:text-right"
+        >
+          <span class="text-xs font-mono text-zinc-500 flex items-center justify-end gap-1 mb-2">
+            Next Case Study &rarr;
+          </span>
+          <span class="text-sm font-semibold text-zinc-200 group-hover:text-emerald-400 transition-colors line-clamp-1">
+            {nextProject.data.title}
+          </span>
+        </a>
+      )
+    }
+  </nav>
+</BaseLayout>

@@ -1,0 +1,159 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import StatusBadge from '../components/StatusBadge.astro';
+
+const philosophies = [
+  {
+    title: '1. Catch Bugs Early (Shift-Left)',
+    tag: 'Prevention',
+    description:
+      'Finding and fixing bugs during PR checks via fast API tests is 10x cheaper and easier than triaging issues after they reach staging or production environments.',
+  },
+  {
+    title: '2. Zero Tolerance for Flaky Tests',
+    tag: 'Reliability',
+    description:
+      'When tests fail randomly, developers stop trusting test results. We eliminate flakiness by replacing Thread.sleep with smart auto-waiting and creating reliable mock services.',
+  },
+  {
+    title: '3. Pragmatic Test Strategy',
+    tag: 'Efficiency',
+    description:
+      'We keep test suites fast by doing heavy verification at the API and database layer, while running focused end-to-end UI tests on critical user journeys (like checkout and login).',
+  },
+  {
+    title: '4. Empowering Developers with Tools',
+    tag: 'Productivity',
+    description:
+      'An SDET’s job is also to make testing easy for everyone. Building tools like our Slack test bot lets any engineer run regression tests in seconds without manual friction.',
+  },
+];
+---
+
+<BaseLayout
+  title="About & Engineering Philosophy | Alfath Febriadi Pratama"
+  description="Software Engineer in Test (SDET) background, practical testing philosophy, education, and approach to building reliable software systems."
+>
+  <!-- Page Header -->
+  <section class="py-8 sm:py-12 border-b border-zinc-800/80 mb-12">
+    <div class="max-w-4xl">
+      <div class="flex items-center gap-3 mb-4">
+        <StatusBadge text="Engineering Mindset" status="passing" size="sm" pulse={false} />
+        <span class="text-xs font-mono text-zinc-500 uppercase tracking-widest">About Me</span>
+      </div>
+
+      <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-white mb-4">
+        About & Testing Philosophy
+      </h1>
+      <p class="text-base sm:text-lg text-zinc-400 leading-relaxed max-w-2xl">
+        Building fast, stable test automation and internal tools that help engineering teams ship with confidence.
+      </p>
+    </div>
+  </section>
+
+  <!-- Bio / Introduction -->
+  <section class="mb-16">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+      <div class="lg:col-span-2 space-y-6 text-zinc-300 leading-relaxed">
+        <h2 class="text-2xl font-bold text-white tracking-tight">
+          Hi, I'm Alfath Febriadi Pratama 👋
+        </h2>
+        <p>
+          I am a <strong class="text-white">Software Engineer in Test (SEIT / SDET)</strong> based in Jakarta, Indonesia, with over 5 years of hands-on experience building automated test frameworks, mock services, and CI/CD quality gates in FinTech and Digital Banking.
+        </p>
+        <p>
+          In my roles at <strong class="text-emerald-400 font-medium">Kredivo Group</strong> (digital credit and Buy Now Pay Later platform) and <strong class="text-emerald-400 font-medium">Bank Central Asia (BCA)</strong> (Indonesia's largest private bank), I have focused on solving the real-world challenges that slow down release cycles: flaky test suites, slow external payment sandboxes, and manual testing bottlenecks.
+        </p>
+        <p>
+          I treat test code with the same high standards as production code—writing clean and maintainable Java frameworks, directly validating database records, and building internal Slack bots so any engineer can trigger tests with a single click.
+        </p>
+      </div>
+
+      <!-- Quick Highlights Card -->
+      <div class="bg-surface/80 border border-border rounded-xl p-6 h-fit space-y-4">
+        <h3 class="text-xs font-mono font-semibold text-emerald-400 uppercase tracking-wider">
+          Quick Facts
+        </h3>
+        <ul class="space-y-3 text-xs font-mono text-zinc-300">
+          <li class="flex items-center justify-between py-1 border-b border-zinc-800">
+            <span class="text-zinc-500">Location:</span>
+            <span>Jakarta, Indonesia</span>
+          </li>
+          <li class="flex items-center justify-between py-1 border-b border-zinc-800">
+            <span class="text-zinc-500">Experience:</span>
+            <span class="text-emerald-400 font-bold">5+ Years</span>
+          </li>
+          <li class="flex items-center justify-between py-1 border-b border-zinc-800">
+            <span class="text-zinc-500">Industry:</span>
+            <span>FinTech & Banking</span>
+          </li>
+          <li class="flex items-center justify-between py-1 border-b border-zinc-800">
+            <span class="text-zinc-500">Primary Stack:</span>
+            <span>Java, Playwright, SQL</span>
+          </li>
+          <li class="flex items-center justify-between py-1">
+            <span class="text-zinc-500">Status:</span>
+            <span class="text-emerald-400">🟢 Open for SDET Roles</span>
+          </li>
+        </ul>
+
+        <div class="pt-2">
+          <a
+            href="mailto:alfathafp@gmail.com"
+            class="w-full py-2.5 px-4 rounded-lg bg-emerald-400 hover:bg-emerald-300 text-zinc-950 text-xs font-mono font-semibold transition-all flex items-center justify-center gap-2 shadow-sm"
+          >
+            <span>Get in Touch</span>
+            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Engineering Philosophy Pillars -->
+  <section class="mb-16">
+    <div class="mb-8">
+      <h2 class="text-xs font-mono font-semibold uppercase tracking-wider text-emerald-400 mb-1">
+        Core Principles
+      </h2>
+      <h3 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+        How I Approach Software Testing
+      </h3>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {philosophies.map((item) => (
+        <div class="bg-surface border border-border rounded-xl p-6 flex flex-col justify-between hover:border-zinc-700 transition-all">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-mono text-emerald-400 font-semibold">{item.tag}</span>
+            </div>
+            <h4 class="text-base font-semibold text-zinc-100 mb-2">{item.title}</h4>
+            <p class="text-sm text-zinc-400 leading-relaxed">{item.description}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Education Section -->
+  <section class="bg-surface/50 border border-border rounded-xl p-6 sm:p-8">
+    <h3 class="text-xs font-mono font-semibold text-emerald-400 uppercase tracking-wider mb-2">
+      Education & Academic Background
+    </h3>
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-zinc-800 pb-4 mb-4">
+      <div>
+        <h4 class="text-lg font-bold text-white">POLITEKNIK STMI JAKARTA</h4>
+        <p class="text-sm text-zinc-400 font-mono">Bachelor of Applied Computer Science (Automation Industry Information System)</p>
+      </div>
+      <div class="text-xs font-mono text-zinc-400 bg-zinc-900 px-3 py-1.5 rounded border border-zinc-800 w-fit">
+        2016 – 2020 | GPA 3.41 / 4.00
+      </div>
+    </div>
+    <p class="text-sm text-zinc-400 leading-relaxed">
+      Studied programming languages (Java, PHP, JavaScript, SQL), database design, systems analysis, and industrial automation. Served as human resource development staff in the HIMASIS student organization for two years.
+    </p>
+  </section>
+</BaseLayout>
