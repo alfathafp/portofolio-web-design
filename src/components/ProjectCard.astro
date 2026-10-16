@@ -16,7 +16,7 @@ const { project, ...directProps } = Astro.props;
 
 const title = project ? project.data.title : directProps.title || '';
 const description = project ? project.data.description : directProps.description || '';
-const href = project ? `/projects/${project.id.replace(/\.md$/, '')}` : directProps.href || '#';
+const href = project ? `/projects/${project.id}` : directProps.href || '#';
 const tags = project ? project.data.tags : directProps.tags || [];
 const metrics = project ? project.data.metrics : directProps.metrics || [];
 const featured = project ? project.data.featured : directProps.featured || false;

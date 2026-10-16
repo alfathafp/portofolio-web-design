@@ -1,0 +1,68 @@
+---
+// Renders ```mermaid code blocks as interactive SVG diagrams (client-side via mermaid.js)
+interface Props {
+  className?: string;
+}
+
+const { className = '' } = Astro.props;
+---
+
+<div class={`mermaid-container ${className}`}></div>
+
+<script>
+  async function renderMermaid() {
+    // Find every <pre><code class="language-mermaid"> block emitted by Shiki/Astro
+    const mermaidCodeBlocks = document.querySelectorAll<HTMLElement>('pre code.language-mermaid');
+
+    if (mermaidCodeBlocks.length === 0) return;
+
+    const { default: mermaid } = await import('mermaid');
+
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: 'dark',
+      fontFamily: 'JetBrains Mono, ui-monospace, monospace',
+      themeVariables: {
+        background: '#121215',
+        primaryColor: '#0f2f24',
+        primaryTextColor: '#d4d4d8',
+        primaryBorderColor: '#10b981',
+        lineColor: '#3f3f46',
+        secondaryColor: '#1a2b3a',
+        tertiaryColor: '#18181b',
+      },
+      flowchart: { curve: 'basis' },
+    });
+
+    mermaidCodeBlocks.forEach(async (codeEl) => {
+      const pre = codeEl.closest('pre');
+      if (!pre || pre.dataset.mermaidRendered === 'true') return;
+
+      const graphDefinition = codeEl.textContent ?? '';
+      const id = `mermaid-svg-${Math.random().toString(36).slice(2, 10)}`;
+
+      try {
+        const { svg } = await mermaid.render(id, graphDefinition);
+        const wrapper = document.createElement('div');
+        wrapper.className = 'mermaid-wrapper my-6 overflow-x-auto rounded-xl border border-zinc-800 bg-zinc-900/50 p-4 text-center';
+        wrapper.innerHTML = svg;
+
+        pre.replaceWith(wrapper);
+        pre.dataset.mermaidRendered = 'true';
+      } catch (err) {
+        console.error('Mermaid render failed:', err);
+        // Keep the raw code block visible as graceful fallback
+      }
+    });
+  }
+
+  renderMermaid();
+  document.addEventListener('astro:page-load', renderMermaid);
+</script>
+
+<style>
+  .mermaid-wrapper :global(svg) {
+    max-width: 100%;
+    height: auto;
+  }
+</style>

@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import StatusBadge from '../components/StatusBadge.astro';
+import { ArrowRight } from 'lucide-astro';
 
 const philosophies = [
   {
@@ -13,13 +14,13 @@ const philosophies = [
     title: '2. Zero Tolerance for Flaky Tests',
     tag: 'Reliability',
     description:
-      'When tests fail randomly, developers stop trusting test results. We eliminate flakiness by replacing Thread.sleep with smart auto-waiting and creating reliable mock services.',
+      'When tests fail randomly, developers stop trusting test results. I eliminate flakiness by replacing Thread.sleep with smart auto-waiting and creating reliable mock services.',
   },
   {
     title: '3. Pragmatic Test Strategy',
     tag: 'Efficiency',
     description:
-      'We keep test suites fast by doing heavy verification at the API and database layer, while running focused end-to-end UI tests on critical user journeys (like checkout and login).',
+      'I keep test suites fast by doing heavy verification at the API and database layer, while running focused end-to-end UI tests on critical user journeys (like checkout and login).',
   },
   {
     title: '4. Empowering Developers with Tools',
@@ -59,7 +60,7 @@ const philosophies = [
           Hi, I'm Alfath Febriadi Pratama 👋
         </h2>
         <p>
-          I am a <strong class="text-white">Software Engineer in Test (SEIT / SDET)</strong> based in Jakarta, Indonesia, with over 5 years of hands-on experience building automated test frameworks, mock services, and CI/CD quality gates in FinTech and Digital Banking.
+          I am a <strong class="text-white">Software Development Engineer in Test (SDET)</strong> based in Jakarta, Indonesia, with over 5 years of hands-on experience building automated test frameworks, mock services, and CI/CD quality gates in FinTech and Digital Banking.
         </p>
         <p>
           In my roles at <strong class="text-emerald-400 font-medium">Kredivo Group</strong> (digital credit and Buy Now Pay Later platform) and <strong class="text-emerald-400 font-medium">Bank Central Asia (BCA)</strong> (Indonesia's largest private bank), I have focused on solving the real-world challenges that slow down release cycles: flaky test suites, slow external payment sandboxes, and manual testing bottlenecks.
@@ -103,9 +104,7 @@ const philosophies = [
             class="w-full py-2.5 px-4 rounded-lg bg-emerald-400 hover:bg-emerald-300 text-zinc-950 text-xs font-mono font-semibold transition-all flex items-center justify-center gap-2 shadow-sm"
           >
             <span>Get in Touch</span>
-            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-            </svg>
+            <ArrowRight size={14} class="w-3.5 h-3.5" />
           </a>
         </div>
       </div>

@@ -10,6 +10,10 @@
       // Check if button already exists
       if (pre.querySelector('.code-copy-btn')) return;
 
+      // Skip mermaid diagram blocks — they are rendered as diagrams, not copyable code
+      const codeEl = pre.querySelector('code');
+      if (codeEl && codeEl.classList.contains('language-mermaid')) return;
+
       // Ensure pre is relatively positioned
       if (getComputedStyle(pre).position === 'static') {
         pre.style.position = 'relative';

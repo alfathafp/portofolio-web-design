@@ -2,11 +2,12 @@
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import StatusBadge from '../../components/StatusBadge.astro';
+import { ChevronLeft } from 'lucide-astro';
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects');
   return projects.map((project) => ({
-    params: { slug: project.id.replace(/\.md$/, '') },
+    params: { slug: project.id },
     props: { project },
   }));
 }
@@ -34,9 +35,7 @@ const isFlagship = project.data.featured;
       href="/projects"
       class="inline-flex items-center gap-2 text-xs font-mono text-zinc-400 hover:text-emerald-400 transition-colors"
     >
-      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-      </svg>
+      <ChevronLeft size={16} class="w-4 h-4" />
       <span>Back to All Case Studies</span>
     </a>
   </div>
@@ -191,7 +190,7 @@ const isFlagship = project.data.featured;
     {
       prevProject ? (
         <a
-          href={`/projects/${prevProject.id.replace(/\.md$/, '')}`}
+          href={`/projects/${prevProject.id}`}
           class="group p-5 rounded-xl bg-surface/70 border border-border hover:border-zinc-700 transition-all flex flex-col justify-between"
         >
           <span class="text-xs font-mono text-zinc-500 flex items-center gap-1 mb-2">
@@ -209,7 +208,7 @@ const isFlagship = project.data.featured;
     {
       nextProject && (
         <a
-          href={`/projects/${nextProject.id.replace(/\.md$/, '')}`}
+          href={`/projects/${nextProject.id}`}
           class="group p-5 rounded-xl bg-surface/70 border border-border hover:border-zinc-700 transition-all flex flex-col justify-between sm:text-right"
         >
           <span class="text-xs font-mono text-zinc-500 flex items-center justify-end gap-1 mb-2">
